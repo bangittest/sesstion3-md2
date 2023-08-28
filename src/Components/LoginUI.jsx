@@ -7,52 +7,70 @@ export default class LoginUI extends Component {
       usercode: "",
       email: "",
       password: "",
+      errors: {
+        usercode: "",
+        email: "",
+        password: "",
+      },
     };
   }
   handleOnChange = (e) => {
     const value = e.target.value;
     const name = e.target.name;
-  
+
     console.log(value);
     console.log(name);
     this.setState({
       [name]: value,
     });
-    
   };
 
   handleSubmit = (e) => {
     e.preventDefault();
     if (this.state.usercode === "") {
-      alert("Mã không được để trống");
+      this.setState({
+        errors: { usercode: "Mã không được để trống" },
+      });
       return;
     }
     const usercode = this.state.usercode.split("");
     if (usercode[0] != "N" && usercode[1] != "V") {
-      alert("Mã không đúng định dạng");
+      this.setState({
+        errors: { usercode: "Mã không đúng định dạng" },
+      });
       return;
     }
     if (usercode.length < 8) {
-      alert("Mã không được nhỏ hơn 8 ký tự");
+      this.setState({
+        errors: { usercode: "Mã không được nhỏ hơn 8 ký tự" },
+      });
       return;
     }
     if (usercode.length > 16) {
-      alert("Mã không được lớn hơn 18 ký tự");
+      this.setState({
+        errors: { usercode: "Mã không được lớn hơn 18 ký tự" },
+      });
       return;
     }
     if (this.state.email === "") {
-      alert("Email không được để trông");
+      this.setState({
+        errors: { email: "Email không được để trông" },
+      });
       return;
     }
     const isValidEmail = (email) => {
       return /\S+@\S+\.\S+/.test(email);
     };
     if (!isValidEmail(this.state.email)) {
-      alert(" Email không đúng định dạng");
+      this.setState({
+        errors: { email: " Email không đúng định dạng" },
+      });
       return;
     }
     if (this.state.password === "") {
-      alert("pass word không được bỏ trống");
+      this.setState({
+        errors: { password: "pass word không được bỏ trống" },
+      });
       return;
     }
     const validatePassword = (pass) => {
@@ -61,7 +79,9 @@ export default class LoginUI extends Component {
         .match(/^.*(?=.{8,})(?=.*[a-zA-Z])(?=.*\d).*$/);
     };
     if (!validatePassword(this.state.password)) {
-      alert("“Mật khẩu không được nhỏ hơn 8 ký tự");
+      this.setState({
+        errors: { password: "Mật khẩu không được nhỏ hơn 8 ký tự" },
+      });
       return;
     }
 
@@ -91,6 +111,7 @@ export default class LoginUI extends Component {
               placeholder="Enter Code"
               onChange={this.handleOnChange}
             />
+            <p className="text-danger">{this.state.errors.usercode}</p>
           </div>
           <div className="mb-3">
             <label htmlFor="exampleInputEmail1" className="form-label">
@@ -105,6 +126,7 @@ export default class LoginUI extends Component {
               placeholder="Enter email"
               onChange={this.handleOnChange}
             />
+            <p className="text-danger">{this.state.errors.email}</p>
           </div>
           <div className="mb-3">
             <label htmlFor="exampleInputPassword1" className="form-label">
@@ -118,6 +140,7 @@ export default class LoginUI extends Component {
               placeholder="Password"
               onChange={this.handleOnChange}
             />
+            <p className="text-danger">{this.state.errors.password}</p>
           </div>
           <button type="submit" className="btn btn-primary">
             Submit
